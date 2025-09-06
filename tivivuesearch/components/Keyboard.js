@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native'
 
-export default function Keyboard({}) {
+export default function Keyboard({KeyFunction}) {
     
     const alphabetList = [
         ["A", "B", "C", "D", "E", "F"],
@@ -18,7 +18,7 @@ export default function Keyboard({}) {
                 {alphabetList.map((row, rowIndex) => (
                 <View style={styles.row} key={rowIndex} >
                     {row.map((letter) => (
-                        <TouchableOpacity key={letter} onPress={() => console.log(letter)} style={styles.key}>
+                        <TouchableOpacity key={letter} onPress={() => KeyFunction(letter)} activeOpacity={0.4} style={styles.key}>
                             <Text style={styles.keyText} key={letter}>{letter}</Text>
                         </TouchableOpacity>
                     ))}
@@ -27,12 +27,12 @@ export default function Keyboard({}) {
             </View>
             <View style={{display: 'flex', flexDirection:'row', }}>
                 <View>
-                    <TouchableOpacity style={[styles.key, {width: 170}]}>
+                    <TouchableOpacity style={[styles.key, {width: 170}]} onPress={() => KeyFunction('DELETE')}>
                         <Text style={styles.keyText}>Delete</Text>
                     </TouchableOpacity  >
                 </View>
                 <View>
-                    <TouchableOpacity style={[styles.key, {width: 170}]}>
+                    <TouchableOpacity style={[styles.key, {width: 170}]} onPress={() => KeyFunction('SPACE')}>
                         <Text style={styles.keyText}>Space</Text>
                     </TouchableOpacity  >
                 </View>

@@ -6,6 +6,16 @@ import Keyboard from "../components/Keyboard";
 
 export default function SearchPage() {
 
+    function updateSearchbar(keyPressed) {
+        if(keyPressed === 'DELETE'){
+            setQuery('');
+        } 
+        else if(keyPressed === 'SPACE'){
+            setQuery(query + ' ');
+        }else{
+            setQuery(query + keyPressed);
+        }
+    }
 
     const [query, setQuery] = useState('');
 
@@ -14,7 +24,7 @@ export default function SearchPage() {
             <View style={styles.container}>
                 <View  style={styles.SearchBarContainer}>
                     <View style ={styles.KeyBoardStyle}>
-                        <Keyboard/>
+                        <Keyboard KeyFunction={updateSearchbar} />
                     </View>
                     <View style ={styles.GenreStyle}></View>
                 </View>
@@ -23,7 +33,7 @@ export default function SearchPage() {
                     <View style ={styles.SearchbarStyle}>
                         <SearchBar
                             value={query}
-                
+                            onChangeText={setQuery}
                         />
                     </View>
                     <View style ={styles.MovieResultStyle}></View>

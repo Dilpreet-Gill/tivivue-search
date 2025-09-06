@@ -1,10 +1,19 @@
 import React from 'react';
 import { View, TextInput, StyleSheet, Text } from 'react-native';
 
-export default function SearchBar({}) {
+export default function SearchBar({value, onChangeText}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>SDFSDF</Text>
+      <TextInput 
+        style={styles.text}
+        value={value}
+        onChangeText={onChangeText}
+        editable={false}
+        placeholder="Search..."
+        placeholderTextColor="#888"
+      >
+        {value}
+      </TextInput>
         
     </View>
   );

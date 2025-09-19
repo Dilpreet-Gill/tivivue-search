@@ -22,20 +22,19 @@ export default function SearchBar({value, onChangeText}) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    alignItems: 'center',
     padding: 0,
     borderRadius: 8,
-    margin: 10,
+    //margin: 10,
     borderWidth: 1,
-    borderColor: 'blue'
+    //borderColor: 'blue'
   },
   text: {
     width: '90%',
     fontSize: '50',
     fontFamily: 'New York',
-    margin: 12,
+    //margin: 12,
     borderWidth: 1,
-    padding: 10,
+    //padding: 10,
     color: 'white',
     backgroundColor: 'black',
   },

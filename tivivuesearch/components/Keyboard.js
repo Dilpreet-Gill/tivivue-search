@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native'
 
+
 export default function Keyboard({KeyFunction}) {
-    
+
     const alphabetList = [
         ["A", "B", "C", "D", "E", "F"],
         ["G", "H", "I", "J", "K", "L"],
@@ -18,22 +19,34 @@ export default function Keyboard({KeyFunction}) {
                 {alphabetList.map((row, rowIndex) => (
                 <View style={styles.row} key={rowIndex} >
                     {row.map((letter) => (
-                        <TouchableOpacity key={letter} onPress={() => KeyFunction(letter)} activeOpacity={0.4} style={styles.key}>
+                        <TouchableOpacity 
+                        key={letter} 
+                        onPress={() => KeyFunction(letter)} 
+                        activeOpacity={0.4} 
+                        style={[styles.key]}
+                        >
+
                             <Text style={styles.keyText} key={letter}>{letter}</Text>
+
                         </TouchableOpacity>
                     ))}
                 </View>
                 ))}
             </View>
-            <View style={{display: 'flex', flexDirection:'row', }}>
+            <View style={{display: 'flex', flexDirection:'row', paddingRight: 75 }}>
                 <View>
-                    <TouchableOpacity style={[styles.key, {width: 170}]} onPress={() => KeyFunction('DELETE')}>
-                        <Text style={styles.keyText}>Delete</Text>
+                    <TouchableOpacity style={[styles.key, {width: 152}]} onPress={() => KeyFunction('CLEAR')}>
+                        <Text style={styles.keyText}>Clear</Text>
                     </TouchableOpacity  >
                 </View>
                 <View>
-                    <TouchableOpacity style={[styles.key, {width: 170}]} onPress={() => KeyFunction('SPACE')}>
+                    <TouchableOpacity style={[styles.key, {width: 152}]} onPress={() => KeyFunction('SPACE')}>
                         <Text style={styles.keyText}>Space</Text>
+                    </TouchableOpacity  >
+                </View>
+                <View>
+                    <TouchableOpacity style={[styles.key, {width: 152}]} onPress={() => KeyFunction('DELETE')}>
+                        <Text style={styles.keyText}>Delete</Text>
                     </TouchableOpacity  >
                 </View>
             </View>
@@ -44,6 +57,8 @@ export default function Keyboard({KeyFunction}) {
 const styles = StyleSheet.create({
 
     container: {
+        paddingTop: 160,
+        paddingRight: 75,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -51,7 +66,6 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'center',
-        
     
     },
 
@@ -62,14 +76,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'black',
         padding: 1,
-        width: 55,
+        width: 75,
         height: 60,
         margin: 1,
     },
 
     keyText: {
-        fontSize:32,
+        fontSize:45,
         color: 'white'
+    },
+    buttonFocus: {
+        backgroundColor: 'grey',
+
     }
 
 

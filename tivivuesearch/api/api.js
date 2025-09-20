@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const API_HOST = "https://chicotv.top";
-const USERNAME = "dXzCgZYdCr";
-const PASSWORD = "gMNBcAJhay";
+const USERNAME = "zD3HBEPnpS";
+const PASSWORD = "VAGHcveSTD";
 
 const baseURL = `${API_HOST}/player_api.php`;
 

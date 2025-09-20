@@ -38,7 +38,7 @@ export default function SearchPage() {
         }
 
 
-    })
+    }, 1000);
 
 
     useEffect(() => {
@@ -76,19 +76,19 @@ export default function SearchPage() {
 
     fetchLiveStreams();
     }, []);
-    
+
     const [query, setQuery] = useState('');
    
     const renderSeriesItem = React.useCallback(({ item }) => (
       <View style={styles.card}>
          { <Image 
-          style={{ width: 270, height: 270, }}
+          style={styles.TvMovieListStyle}
           source={ item.cover ? {uri: item.cover} : require('../assets/images/icon.png') }
-          onError={(e) => console.log('Image failed to load:', item.cover, e.nativeEvent)}
+          onError={(e) => console.log('series Image failed to load:', item.cover, e.nativeEvent)}
           />
          }
          <TouchableOpacity>
-          <Text style={{fontSize: 30, color: 'white'}}>{item.name}</Text>
+          <Text style={styles.itemTextStyle}>{item.name}</Text>
         </TouchableOpacity>
       </View>
     ), []);
@@ -96,19 +96,33 @@ export default function SearchPage() {
     const renderMovieItem = React.useCallback(({ item }) => (
       <View style={styles.card}>
          { <Image 
-          style={{ width: 270, height: 270, resizeMode:'contain' }}
+          style={styles.TvMovieListStyle}
           source={ item.stream_icon ? {uri: item.stream_icon} : require('../assets/images/icon.png') }
-          onError={(e) => console.log('Image failed to load:', item.cover, e.nativeEvent)}
+          onError={(e) => console.log('live Image failed to load:', item.stream_icon, e.nativeEvent)}
           />
          }
          <TouchableOpacity>
-          <Text style={{fontSize: 30, color: 'white'}}>{item.name}</Text>
+          <Text style={styles.itemTextStyle}>{item.name}</Text>
+        </TouchableOpacity>
+      </View>
+    ), []);
+
+    const renderLiveItem = React.useCallback(({ item }) => (
+      <View style={styles.card}>
+         { <Image 
+          style={styles.liveItemStyle}
+          source={ item.stream_icon ? {uri: item.stream_icon} : require('../assets/images/icon.png') }
+          onError={(e) => console.log('live Image failed to load:', item.stream_icon, e.nativeEvent)}
+          />
+         }
+         <TouchableOpacity>
+          <Text style={styles.itemTextStyle}>{item.name}</Text>
         </TouchableOpacity>
       </View>
     ), []);
     
     return (
-        <View style={{flex: 1, backgroundColor: 'black'}}>
+        <View style={styles.main}>
             <View style={styles.container}>
                 <View  style={styles.SearchBarContainer}>
                     <View style ={styles.KeyBoardStyle}>
@@ -118,50 +132,66 @@ export default function SearchPage() {
                 </View>
 
                 <View style={styles.resultContainer}>
-                    <View style ={styles.SearchbarStyle}>
+                    <View autoFocus style ={styles.SearchbarStyle}>
                         <SearchBar
                             value={query}
                             onChangeText={setQuery}
                         />
                     </View>
-                    <TVFocusGuideView autoFocus={true} destinations={[tvSearch.current]}>
+                    <TVFocusGuideView autoFocus>
                       <View style={styles.ChannelStyle}>
                         <TouchableHighlight activeOpacity={0.4} onPress={toggleTvSeriesButton} ref={tvSearch}>
-                          <Text style={[styles.TextStyle, showTvMovies ? styles.buttonPressed : styles.TextStyle]}>TV Series & Movies</Text>
+                          <Text style={[styles.TextStyle, showTvMovies ? styles.buttonPressed : styles.TextStyle, {fontSize: 50}]}>TV Series & Movies</Text>
                         </TouchableHighlight>
                         <TouchableHighlight activeOpacity={0.4} onPress={toggleLiveChannelsButton}>
-                          < Text style={[styles.TextStyle, showLiveChannels ? styles.buttonPressed : styles.TextStyle]}>Live Channels</Text> 
+                          < Text style={[styles.TextStyle, showLiveChannels ? styles.buttonPressed : styles.TextStyle, {fontSize: 50}]}>Live Channels</Text> 
                         </TouchableHighlight>
                       </View>
                     </TVFocusGuideView>
-                    <View style ={styles.MovieResultStyle}>
-                      { showTvMovies && <FlatList
-                        style={{height: 400}}
+                    <TVFocusGuideView autoFocus style ={styles.MovieResultStyle}>
+                      { showTvMovies && <ScrollView>
+                      <Text style={styles.TextStyle}>TV Shows</Text> 
+                      {loading ? (
+                        <ActivityIndicator/>
+                      ) : (
+                      <FlatList
+                        style={{height: 500}}
                         horizontal
+                        initialNumToRender={7}
                         ListEmptyComponent={() => <Text style={styles.TextStyle}>No Results Found</Text>}
                         data={series.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))}
                         keyExtractor={(item) => item.series_id}
                         renderItem= {renderSeriesItem}
                         />
-                      }
-                      { showTvMovies && <FlatList
-                        style={{height: 400}}
+                      ) }
+                      <Text style={styles.TextStyle}>Movies</Text> 
+                      {loading ? (
+                        <ActivityIndicator/>
+                      ) : (
+                      <FlatList
+                        style={{height: 500}}
                         horizontal
+                        ListEmptyComponent={() => <Text style={styles.TextStyle}>No Results Found</Text>}
                         data={movies.filter(item => typeof item.title === 'string' && item.title.toLowerCase().includes(query.toLowerCase()))}
                         keyExtractor={(item) => item.stream_id}
                         renderItem= {renderMovieItem}
                         />
-                      }
-                      { showLiveChannels && <FlatList
-                       numColumns={4}
+                      ) }
+                      </ScrollView> }
+                      {loading ? (
+                        <ActivityIndicator/>
+                      ) : (
+                       showLiveChannels && <FlatList
+                        numColumns={4}
                         key={Math.random().toString()}
                         ListEmptyComponent={() => <Text style={styles.TextStyle}>No Results Found</Text>}
                         data={liveStreams.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))}
                         keyExtractor={(item) => item.stream_id.toString()}
-                        renderItem= {renderMovieItem}
+                        renderItem= {renderLiveItem}
                         />
-                      }
-                    </View>
+                      )}
+                    </TVFocusGuideView>
+                    
                 </View>
                 
             </View>
@@ -171,6 +201,10 @@ export default function SearchPage() {
 
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1, 
+    backgroundColor: 'black'
+  },
 
   container: {
     display: 'flex',
@@ -207,6 +241,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex:2,
+    paddingTop: 15
   },
   GenreStyle: {
     paddingTop:100,
@@ -236,7 +271,20 @@ const styles = StyleSheet.create({
   buttonPressed: {
     textDecorationLine: 'underline'
   },
-
+  TvMovieListStyle :{
+    width: 270, 
+    height:400, 
+    resizeMode: 'cover'
+  },
+  liveItemStyle :{
+    width: 270, 
+    height: 300, 
+    resizeMode:'contain' 
+  },
+  itemTextStyle : {
+    fontSize: 30, 
+    color: 'white'
+  }
 
 
 })
